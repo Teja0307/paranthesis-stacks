@@ -1,0 +1,108 @@
+#include<iostream>
+#include <cstdio>
+#include<string.h>
+using namespace std;
+#define MAX 10000
+int top=-1;
+int stack[MAX];
+
+int isfull(){
+    if(top==MAX-1)
+      return 1;
+    else
+      return 0;
+    
+}
+
+void push(char c){
+    if(isfull())
+    {
+        cout<<"stack overflow";
+        exit(1);
+    }
+    top=top+1;
+    stack[top]=c;
+}
+
+
+int isempty(){
+    if(top==-1)
+      return 1;
+    else
+      return 0;
+}
+
+char pop(){
+    char c;
+    if(isempty())
+    {
+        cout<<"stack underflow";
+        exit(1);
+    }
+    c=stack[top];
+    top--;
+    return c;
+}
+
+
+int match_char(char a,char b){
+    if(a=='[' && b==']')
+       return 1;
+    if(a=='(' && b==')')
+       return 1;
+    if(a=='<' && b=='>')
+       return 1;
+    if(a=='{' && b=='}')
+       return 1;
+    return 0;
+}
+
+
+int checkbalanced(string s){
+    char temp;
+    int i;
+    int n=s.size();
+    for(i=0;i<n;i++)
+    {
+        if(s[i]=='(' || s[i]=='[' || s[i]=='{' || s[i]=='<')
+          push(s[i]);
+        if(s[i]==')' || s[i]==']' || s[i]=='}' || s[i]=='>')
+        {
+            if(isempty())
+            {
+                cout<<"Right brackets are more than left\n";
+                return 0;
+            }
+            else
+            {
+                temp=pop();
+                if(!match_char(temp,s[i])){
+                    cout<<"Mismatched brackets\n";
+                    return 0;
+                }
+            }
+        }
+    }
+    if(isempty())
+    {
+        cout<<"Brackets are well balanced\n";
+        return 1;
+    }
+    else
+    {
+        cout<<"Left brackets are more than right brackets\n";
+        return 0;
+    }
+}
+
+int main()
+{
+    string exp;
+    cin>>exp;
+    int balanced;
+    balanced=checkbalanced(exp);
+    if(balanced==1)
+      cout<<"The expression is valid";
+    else
+      cout<<"The expression is not balanced";
+}
